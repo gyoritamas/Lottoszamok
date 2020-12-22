@@ -9,7 +9,7 @@ namespace Lottoszamok
 {
     class Program
     {
-        private static List<Sorsolas> FajlOlvas(String filePath, String fileName)
+        private static List<Sorsolas> FajlOlvas(string filePath, string fileName)
         {
             List<Sorsolas> lista = new List<Sorsolas>();
             if (!File.Exists(filePath + fileName))
@@ -48,16 +48,39 @@ namespace Lottoszamok
             return sorsoltSzamok;
         }
 
+        private static void FajlKiir(string filePath, string fileName, List<Sorsolas> sorsolasok)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath + fileName, false, Encoding.UTF8))
+            {
+                foreach (Sorsolas sorsolas in sorsolasok)
+                {
+                    string line = "";
+                    line+=sorsolas.sorsolasNapja.ToShortDateString() + ";";
+                    if (sorsolas.sorsoltSzamok == null) {
+                        line+="X;X;X;X;X";
+                    }
+                    else
+                    {
+                        foreach (int szam in sorsolas.sorsoltSzamok)
+                        {
+                            line+=szam + ";";
+                        }
+                    }
+                    sw.WriteLine(line.TrimEnd(';'));
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             #region 1.feladat
             Console.Write("1. feladat: ");
-            String fileName = "sorsolas.csv";
+            String fileIn = "sorsolas.csv";
             String filePath = @"..\..\src\";
             List<Sorsolas> sorsolasLista = new List<Sorsolas>();
             try
             {
-                sorsolasLista = FajlOlvas(filePath, fileName);
+                sorsolasLista = FajlOlvas(filePath, fileIn);
             }
             catch (IOException ioe)
             {
@@ -70,7 +93,7 @@ namespace Lottoszamok
 
             #region 2.feladat
             Console.WriteLine("2. feladat: Sorsolások eredménye:");
-            sorsolasLista.ForEach(sorsolas => sorsolas.sorsoltSzamok = Sorsol(1, 9000, 5));
+            sorsolasLista.ForEach(sorsolas => sorsolas.sorsoltSzamok = Sorsol(1, 90, 5));
             List<int> mindenKihuzottSzam = new List<int>();
             var sorsolasokEredmenye = sorsolasLista
                 .GroupBy(sorsolas => sorsolas.sorsolasNapja)
@@ -144,8 +167,23 @@ namespace Lottoszamok
 
             #region 7.feladat
             Console.WriteLine("7. feladat: Jövő évi sorsolások:");
-
+            List<Sorsolas> jovoEviSorsolasok = new List<Sorsolas>();
+            var evElsoSorsolasa = new DateTime(2021, 1, 2);
+            for (int i = 0; i < 10; i++)
+            {
+                jovoEviSorsolasok.Add(new Sorsolas(evElsoSorsolasa.AddDays(i * 7)));
+                Console.WriteLine("\t" + jovoEviSorsolasok[i].sorsolasNapja.ToShortDateString());
+            }
+            sorsolasLista.AddRange(jovoEviSorsolasok);
             #endregion
+
+            #region 8.feladat
+            Console.Write("8. feladat: ");
+            string fileOut = "lottoszamok.csv";
+            FajlKiir(filePath, fileOut, sorsolasLista);
+            Console.WriteLine(fileOut);
+            #endregion
+
             Console.ReadKey();
         }
     }
