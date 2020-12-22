@@ -8,8 +8,8 @@ namespace Lottoszamok
 {
     class Sorsolas
     {
-        private DateTime sorsolasNapja;
-        public int MyProperty { get; set; }
+        public DateTime sorsolasNapja { get; set; }
+        public List<int> sorsoltSzamok { get; set; }
         public Sorsolas(DateTime datum)
         {
             this.sorsolasNapja = datum;
