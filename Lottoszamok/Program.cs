@@ -55,15 +55,16 @@ namespace Lottoszamok
                 foreach (Sorsolas sorsolas in sorsolasok)
                 {
                     string line = "";
-                    line+=sorsolas.sorsolasNapja.ToShortDateString() + ";";
-                    if (sorsolas.sorsoltSzamok == null) {
-                        line+="X;X;X;X;X";
+                    line += sorsolas.sorsolasNapja.ToShortDateString() + ";";
+                    if (sorsolas.sorsoltSzamok == null)
+                    {
+                        line += "X;X;X;X;X";
                     }
                     else
                     {
                         foreach (int szam in sorsolas.sorsoltSzamok)
                         {
-                            line+=szam + ";";
+                            line += szam + ";";
                         }
                     }
                     sw.WriteLine(line.TrimEnd(';'));
@@ -114,7 +115,6 @@ namespace Lottoszamok
 
             #region 3.feladat
             Console.Write("3. feladat: ");
-
             Console.WriteLine($"{mindenKihuzottSzam.Count} db számot húztak ki.");
             #endregion
 
